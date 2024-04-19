@@ -9,35 +9,38 @@ class VerseRoutes extends BaseRoute {
       this.setRoutes('/', this.getVerseByChapterNumberBookNameVerseNumber);
    }
 
-   typeCheck(chapterNumber, bookName, verseNumber) {
-      if (
-         !this.isNumber(chapterNumber) ||
-         !this.isNumber(verseNumber) ||
-         !this.isString(bookName)
-      ) {
-         throw new BadRequest(
-            {
-               chapterNumber,
-               bookName,
-               verseNumber,
-            },
-            'verify your query params'
-         );
-      }
-   }
    async getVerseByChapterNumberBookNameVerseNumber(req, res) {
+      function typeCheck(
+         chapterNumber = null,
+         bookName = null,
+         verseNumber = null
+      ) {
+         if (!chapterNumber || !bookName || !verseNumber) {
+            throw new BadRequest(
+               {
+                  chapterNumber,
+                  bookName,
+                  verseNumber,
+               },
+               'Invalid Query Params'
+            );
+         }
+      }
       try {
-         const { chapterNumber, bookName, verseNumber } = req.query;
+         const verseNumber = parseInt(req.query.verseNumber);
+         const chapterNumber = parseInt(req.query.chapterNumber);
+         const bookName = req.query.bookName;
 
-         chapterNumber = parseInt(chapterNumber);
-         verseNumber = parseInt(verseNumber);
-         this.typeCheck(chapterNumber, bookName, verseNumber);
+         typeCheck(chapterNumber, bookName, verseNumber);
 
          const verseService = new VerseService();
-
          const result =
             await verseService.getOneVerseBasedInChapertNumberBookNameVerseNumber(
-               { chapterNumber, bookName, verseNumber }
+               {
+                  chapterNumber,
+                  bookName,
+                  verseNumber,
+               }
             );
 
          if (!result) {

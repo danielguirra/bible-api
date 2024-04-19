@@ -7,16 +7,18 @@ class BaseRoute {
       this.router.get(nameRoute, func);
    }
 
-   isString = (string) => {
+   isString(string) {
       return typeof string == 'string';
-   };
+   }
 
-   isNumber = (num) => {
+   isNumber(num) {
       return typeof num == 'number';
-   };
+   }
 
    constructor(routeName) {
       this.routeName = routeName;
+      this.isNumber = this.isNumber;
+      this.isString = this.isString;
    }
 }
 

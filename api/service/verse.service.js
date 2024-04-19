@@ -12,6 +12,7 @@ class VerseService {
             bookName,
             verseNumber,
          },
+         logging: false,
       });
 
       if (finder) {
